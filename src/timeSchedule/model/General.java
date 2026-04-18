@@ -22,14 +22,15 @@ public class General extends Schedule {
 
     @Override
     public String getDisplayString() {
-        return "[" + getId() + "] [GENERAL] "
-                + getTitle()
-                + " | Date: " + getDate()
-                + " | Time: " + getTime()
-                + " | Place: " + place
-                + " | Priority: " + getPriority()
-                + " | Status: " + getStatus()
-                + " | Detail: " + getDetail();
+        return String.format(
+                "%-3d %-12s %-20s %-12s %-6s %-6s",
+                getId(),
+                getCategory(),
+                getTitle(),
+                getFormattedDate(),
+                getTime(),
+                getStatus()
+        );
     }
 
     @Override

@@ -58,64 +58,78 @@ public class Controller {
         view.printCategoryMenu(color);
         int categoryChoice = inputInt("Select category: ");
 
-        if (categoryChoice == 0) {
-            return;
-        }
-
-        String title = input("Title: ");
-        String detail = input("Detail: ");
-        Priority priority = inputPriority();
+        if (categoryChoice == 0) return;
 
         switch (categoryChoice) {
-            case 1 -> addExam(title, detail, priority);
-            case 2 -> addAssignment(title, detail, priority);
-            case 3 -> addFixed(title, detail, priority);
-            case 4 -> addGeneral(title, detail, priority);
+            case 1 -> addExam();
+            case 2 -> addAssignment();
+            case 3 -> addFixed();
+            case 4 -> addGeneral();
             default -> view.printMessage(color, "Invalid category.");
         }
 
         waitEnter();
     }
 
-    private void addExam(String title, String detail, Priority priority) {
+    private void addExam() {
         String subject = input("Subject: ");
+        String detail = input("Detail: ");
         String location = input("Location: ");
-        LocalDate date = inputDate("Date (yyyy-MM-dd): ");
+        LocalDate date = inputDateWithoutYear("Date (MM-dd): ");
         LocalTime time = inputTime("Time (HH:mm): ");
 
-        Exam exam = new Exam(title, detail, priority, date, time, subject, location);
+        // ⭐ 마지막에 priority
+        Priority priority = inputPriority();
+
+        Exam exam = new Exam(subject, detail, priority, date, time, location);
         manager.addSchedule(exam);
+
         view.printMessage(color, "Exam schedule added.");
     }
 
-    private void addAssignment(String title, String detail, Priority priority) {
+    private void addAssignment() {
+        String title = input("Title: ");
         String subject = input("Subject: ");
+        String detail = input("Detail: ");
         String submissionType = input("Submission Type: ");
-        LocalDate date = inputDate("Due Date (yyyy-MM-dd): ");
+        LocalDate date = inputDateWithoutYear("Due Date (MM-dd): ");
         LocalTime time = inputTime("Due Time (HH:mm): ");
+
+        Priority priority = inputPriority();
 
         Assignment assignment = new Assignment(title, detail, priority, date, time, subject, submissionType);
         manager.addSchedule(assignment);
+
         view.printMessage(color, "Assignment schedule added.");
     }
 
-    private void addFixed(String title, String detail, Priority priority) {
+    private void addFixed() {
+        String title = input("Title: ");
+        String detail = input("Detail: ");
         DayOfWeek dayOfWeek = inputDayOfWeek();
         LocalTime time = inputTime("Time (HH:mm): ");
         String place = input("Place: ");
 
+        Priority priority = inputPriority();
+
         Fixed fixed = new Fixed(title, detail, priority, dayOfWeek, time, place);
         manager.addSchedule(fixed);
+
         view.printMessage(color, "Fixed schedule added.");
     }
 
-    private void addGeneral(String title, String detail, Priority priority) {
-        LocalDate date = inputDate("Date (yyyy-MM-dd): ");
+    private void addGeneral() {
+        String title = input("Title: ");
+        String detail = input("Detail: ");
+        LocalDate date = inputDateWithoutYear("Date (MM-dd): ");
         LocalTime time = inputTime("Time (HH:mm): ");
         String place = input("Place: ");
 
+        Priority priority = inputPriority();
+
         General general = new General(title, detail, priority, date, time, place);
         manager.addSchedule(general);
+
         view.printMessage(color, "General schedule added.");
     }
 
@@ -262,22 +276,17 @@ public class Controller {
     }
 
     private void editCommonFields(Schedule schedule) {
-        String title = inputOptional("Title (" + schedule.getTitle() + "): ");
-        if (!title.isBlank()) {
-            schedule.setTitle(title);
-        }
-
         String detail = inputOptional("Detail (" + schedule.getDetail() + "): ");
         if (!detail.isBlank()) {
             schedule.setDetail(detail);
         }
 
-        Priority priority = inputOptionalPriority("Priority (" + schedule.getPriority() + "): ");
+        Priority priority = inputOptionalPriority("Priority (" + schedule.getPriority() + ")");
         if (priority != null) {
             schedule.setPriority(priority);
         }
 
-        Status status = inputOptionalStatus("Status (" + schedule.getStatus() + "): ");
+        Status status = inputOptionalStatus("Status (" + schedule.getStatus() + ")");
         if (status != null) {
             schedule.setStatus(status);
         }
@@ -294,7 +303,7 @@ public class Controller {
             exam.setLocation(location);
         }
 
-        LocalDate date = inputOptionalDate("Date (" + exam.getDate() + "): ");
+        LocalDate date = inputOptionalDateWithoutYear("Date (" + exam.getFormattedDate() + ")");
         if (date != null) {
             exam.setDate(date);
         }
@@ -306,9 +315,19 @@ public class Controller {
     }
 
     private void editAssignment(Assignment assignment) {
+        String title = inputOptional("Title (" + assignment.getTitle() + "): ");
+        if (!title.isBlank()) {
+            assignment.setTitle(title);
+        }
+
         String subject = inputOptional("Subject (" + assignment.getSubject() + "): ");
         if (!subject.isBlank()) {
             assignment.setSubject(subject);
+        }
+
+        String detail = inputOptional("Detail (" + assignment.getDetail() + "): ");
+        if (!detail.isBlank()) {
+            assignment.setDetail(detail);
         }
 
         String submissionType = inputOptional("Submission Type (" + assignment.getSubmissionType() + "): ");
@@ -316,7 +335,7 @@ public class Controller {
             assignment.setSubmissionType(submissionType);
         }
 
-        LocalDate date = inputOptionalDate("Due Date (" + assignment.getDate() + "): ");
+        LocalDate date = inputOptionalDateWithoutYear("Due Date (" + assignment.getFormattedDate() + ")");
         if (date != null) {
             assignment.setDate(date);
         }
@@ -328,7 +347,17 @@ public class Controller {
     }
 
     private void editFixed(Fixed fixed) {
-        DayOfWeek dayOfWeek = inputOptionalDayOfWeek("Day Of Week (" + fixed.getDayOfWeek() + "): ");
+        String title = inputOptional("Title (" + fixed.getTitle() + "): ");
+        if (!title.isBlank()) {
+            fixed.setTitle(title);
+        }
+
+        String detail = inputOptional("Detail (" + fixed.getDetail() + "): ");
+        if (!detail.isBlank()) {
+            fixed.setDetail(detail);
+        }
+
+        DayOfWeek dayOfWeek = inputOptionalDayOfWeek("Day Of Week (" + fixed.getDayOfWeek() + ")");
         if (dayOfWeek != null) {
             fixed.setDayOfWeek(dayOfWeek);
         }
@@ -345,7 +374,17 @@ public class Controller {
     }
 
     private void editGeneral(General general) {
-        LocalDate date = inputOptionalDate("Date (" + general.getDate() + "): ");
+        String title = inputOptional("Title (" + general.getTitle() + "): ");
+        if (!title.isBlank()) {
+            general.setTitle(title);
+        }
+
+        String detail = inputOptional("Detail (" + general.getDetail() + "): ");
+        if (!detail.isBlank()) {
+            general.setDetail(detail);
+        }
+
+        LocalDate date = inputOptionalDateWithoutYear("Date (" + general.getFormattedDate() + ")");
         if (date != null) {
             general.setDate(date);
         }
@@ -427,28 +466,41 @@ public class Controller {
         }
     }
 
-    private LocalDate inputDate(String message) {
-        while (true) {
-            try {
-                System.out.print(message);
-                return LocalDate.parse(sc.nextLine());
-            } catch (Exception e) {
-                System.out.println("Invalid date format. Use yyyy-MM-dd.");
-            }
-        }
-    }
-
-    private LocalDate inputOptionalDate(String message) {
+    private LocalDate inputDateWithoutYear(String message) {
         while (true) {
             try {
                 System.out.print(message);
                 String input = sc.nextLine();
-                if (input.isBlank()) {
-                    return null;
-                }
-                return LocalDate.parse(input);
+                String[] parts = input.split("-");
+                if (parts.length != 2) throw new IllegalArgumentException();
+
+                int month = Integer.parseInt(parts[0]);
+                int day = Integer.parseInt(parts[1]);
+
+                return LocalDate.of(LocalDate.now().getYear(), month, day);
             } catch (Exception e) {
-                System.out.println("Invalid date format. Use yyyy-MM-dd.");
+                System.out.println("Invalid date format. Use MM-dd.");
+            }
+        }
+    }
+
+    private LocalDate inputOptionalDateWithoutYear(String message) {
+        while (true) {
+            try {
+                System.out.print(message + " (Enter만 누르면 유지): ");
+                String input = sc.nextLine();
+
+                if (input.isBlank()) return null;
+
+                String[] parts = input.split("-");
+                if (parts.length != 2) throw new IllegalArgumentException();
+
+                int month = Integer.parseInt(parts[0]);
+                int day = Integer.parseInt(parts[1]);
+
+                return LocalDate.of(LocalDate.now().getYear(), month, day);
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Use MM-dd.");
             }
         }
     }
@@ -469,9 +521,7 @@ public class Controller {
             try {
                 System.out.print(message);
                 String input = sc.nextLine();
-                if (input.isBlank()) {
-                    return null;
-                }
+                if (input.isBlank()) return null;
                 return LocalTime.parse(input);
             } catch (Exception e) {
                 System.out.println("Invalid time format. Use HH:mm.");
@@ -505,9 +555,7 @@ public class Controller {
             System.out.print(message + " (Enter만 누르면 유지): ");
             String input = sc.nextLine();
 
-            if (input.isBlank()) {
-                return null;
-            }
+            if (input.isBlank()) return null;
 
             switch (input) {
                 case "1" -> {
@@ -532,9 +580,7 @@ public class Controller {
             System.out.print(message + " (Enter만 누르면 유지): ");
             String input = sc.nextLine();
 
-            if (input.isBlank()) {
-                return null;
-            }
+            if (input.isBlank()) return null;
 
             switch (input) {
                 case "1" -> {
@@ -586,9 +632,7 @@ public class Controller {
             System.out.print(message + " (Enter만 누르면 유지): ");
             String input = sc.nextLine();
 
-            if (input.isBlank()) {
-                return null;
-            }
+            if (input.isBlank()) return null;
 
             switch (input) {
                 case "1" -> {

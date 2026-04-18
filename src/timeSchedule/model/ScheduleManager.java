@@ -28,10 +28,11 @@ public class ScheduleManager {
 
     public List<Schedule> getSchedulesSortedByStatus() {
         ArrayList<Schedule> list = new ArrayList<>(schedules);
-        list.sort(Comparator
-                .comparing(Schedule::getStatus)
-                .thenComparing(Schedule::getSortDate, Comparator.nullsLast(LocalDate::compareTo))
-                .thenComparing(Schedule::getTime, Comparator.nullsLast((a, b) -> a.compareTo(b))));
+        list.sort(
+                Comparator.comparing(Schedule::getStatus)
+                        .thenComparing(Schedule::getSortDate, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(Schedule::getTime, Comparator.nullsLast(Comparator.naturalOrder()))
+        );
         return list;
     }
 
@@ -43,18 +44,20 @@ public class ScheduleManager {
 
     public List<Schedule> getSchedulesSortedByNearestDate() {
         ArrayList<Schedule> list = new ArrayList<>(schedules);
-        list.sort(Comparator
-                .comparing(Schedule::getSortDate, Comparator.nullsLast(LocalDate::compareTo))
-                .thenComparing(Schedule::getTime, Comparator.nullsLast((a, b) -> a.compareTo(b))));
+        list.sort(
+                Comparator.comparing(Schedule::getSortDate, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(Schedule::getTime, Comparator.nullsLast(Comparator.naturalOrder()))
+        );
         return list;
     }
 
     public List<Schedule> getSchedulesSortedByPriority() {
         ArrayList<Schedule> list = new ArrayList<>(schedules);
-        list.sort(Comparator
-                .comparingInt((Schedule s) -> s.getPriority().getValue())
-                .thenComparing(Schedule::getSortDate, Comparator.nullsLast(LocalDate::compareTo))
-                .thenComparing(Schedule::getTime, Comparator.nullsLast((a, b) -> a.compareTo(b))));
+        list.sort(
+                Comparator.comparingInt((Schedule s) -> s.getPriority().getValue())
+                        .thenComparing(Schedule::getSortDate, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(Schedule::getTime, Comparator.nullsLast(Comparator.naturalOrder()))
+        );
         return list;
     }
 
@@ -65,9 +68,10 @@ public class ScheduleManager {
                 list.add(schedule);
             }
         }
-        list.sort(Comparator
-                .comparing(Schedule::getSortDate, Comparator.nullsLast(LocalDate::compareTo))
-                .thenComparing(Schedule::getTime, Comparator.nullsLast((a, b) -> a.compareTo(b))));
+        list.sort(
+                Comparator.comparing(Schedule::getSortDate, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(Schedule::getTime, Comparator.nullsLast(Comparator.naturalOrder()))
+        );
         return list;
     }
 
