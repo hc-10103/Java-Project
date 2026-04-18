@@ -4,9 +4,7 @@ import timeSchedule.model.Schedule;
 
 import java.util.List;
 
-import static timeSchedule.view.Color.BOLD;
-import static timeSchedule.view.Color.RESET;
-import static timeSchedule.view.Color.YELLOW;
+import static timeSchedule.view.Color.*;
 
 public class View {
 
@@ -121,21 +119,9 @@ public class View {
             return;
         }
 
-        System.out.printf("%-3s %-12s %-20s %-12s %-6s %-6s%n",
-                "ID", "TYPE", "TITLE", "DATE", "TIME", "STATUS");
-        System.out.println("--------------------------------------------------------------");
-
-        for (Schedule s : schedules) {
-            System.out.printf("%-3d %-12s %-20s %-12s %-6s %-6s%n",
-                    s.getId(),
-                    s.getCategory(),
-                    padRight(s.getTitle(), 20),
-                    s.getFormattedDate(),
-                    s.getTime() == null ? "-" : s.getTime(),
-                    s.getStatus());
+        for (Schedule schedule : schedules) {
+            printCard(schedule);
         }
-
-        System.out.println();
     }
 
     public void printMessage(String color, String message) {
@@ -143,15 +129,32 @@ public class View {
         System.out.println();
     }
 
-    private String padRight(String str, int len) {
-        if (str == null) {
-            str = "";
+    private void printCard(Schedule s) {
+        String statusText;
+
+        if (s.getStatus().toString().equals("DONE")) {
+            statusText = GREEN + BOLD + "V" + RESET;
+        } else {
+            statusText = RED + "X" + RESET;
         }
 
-        if (str.length() > len) {
-            return str.substring(0, len - 3) + "...";
-        }
+        System.out.println(
+                WHITE + BOLD +
+                        "[" + s.getId() + "] " +
+                        s.getTitle() +
+                        RESET +
+                        " " +
+                        GRAY + "[" + s.getCategory() + "]" + RESET
+        );
 
-        return String.format("%-" + len + "s", str);
+        System.out.println(
+                "    " +
+                        s.getFormattedDate() + " " +
+                        (s.getTime() == null ? "" : s.getTime()) +
+                        "   " +
+                        statusText
+        );
+
+        System.out.println();
     }
 }
