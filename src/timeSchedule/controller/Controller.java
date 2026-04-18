@@ -58,17 +58,20 @@ public class Controller {
         view.printCategoryMenu(color);
         int categoryChoice = inputInt("Select category: ");
 
-        if (categoryChoice == 0) return;
+        if (categoryChoice == 0) {
+            return;
+        }
 
         switch (categoryChoice) {
             case 1 -> addExam();
             case 2 -> addAssignment();
             case 3 -> addFixed();
             case 4 -> addGeneral();
-            default -> view.printMessage(color, "Invalid category.");
+            default -> {
+                view.printMessage(color, "Invalid category.");
+                waitEnter();
+            }
         }
-
-        waitEnter();
     }
 
     private void addExam() {
@@ -77,30 +80,28 @@ public class Controller {
         String location = input("Location: ");
         LocalDate date = inputDateWithoutYear("Date (MM-dd): ");
         LocalTime time = inputTime("Time (HH:mm): ");
-
-        // ⭐ 마지막에 priority
         Priority priority = inputPriority();
 
         Exam exam = new Exam(subject, detail, priority, date, time, location);
         manager.addSchedule(exam);
 
         view.printMessage(color, "Exam schedule added.");
+        waitEnter();
     }
 
     private void addAssignment() {
-        String title = input("Title: ");
         String subject = input("Subject: ");
         String detail = input("Detail: ");
         String submissionType = input("Submission Type: ");
         LocalDate date = inputDateWithoutYear("Due Date (MM-dd): ");
         LocalTime time = inputTime("Due Time (HH:mm): ");
-
         Priority priority = inputPriority();
 
-        Assignment assignment = new Assignment(title, detail, priority, date, time, subject, submissionType);
+        Assignment assignment = new Assignment(subject, detail, priority, date, time, submissionType);
         manager.addSchedule(assignment);
 
         view.printMessage(color, "Assignment schedule added.");
+        waitEnter();
     }
 
     private void addFixed() {
@@ -109,13 +110,13 @@ public class Controller {
         DayOfWeek dayOfWeek = inputDayOfWeek();
         LocalTime time = inputTime("Time (HH:mm): ");
         String place = input("Place: ");
-
         Priority priority = inputPriority();
 
         Fixed fixed = new Fixed(title, detail, priority, dayOfWeek, time, place);
         manager.addSchedule(fixed);
 
         view.printMessage(color, "Fixed schedule added.");
+        waitEnter();
     }
 
     private void addGeneral() {
@@ -124,100 +125,94 @@ public class Controller {
         LocalDate date = inputDateWithoutYear("Date (MM-dd): ");
         LocalTime time = inputTime("Time (HH:mm): ");
         String place = input("Place: ");
-
         Priority priority = inputPriority();
 
         General general = new General(title, detail, priority, date, time, place);
         manager.addSchedule(general);
 
         view.printMessage(color, "General schedule added.");
+        waitEnter();
     }
 
     private void viewSchedules() {
-        while (true) {
-            view.printViewMenu(color);
-            int menu = inputInt("Select: ");
+        view.printViewMenu(color);
+        int menu = inputInt("Select: ");
 
-            switch (menu) {
-                case 1 -> {
-                    view.printSchedules(color, manager.getAllSchedules());
-                    waitEnter();
-                }
-                case 2 -> viewSchedulesByCategory();
-                case 3 -> viewSortedSchedules();
-                case 0 -> {
-                    return;
-                }
-                default -> {
-                    view.printMessage(color, "Invalid menu.");
-                    waitEnter();
-                }
+        switch (menu) {
+            case 1 -> {
+                view.printSchedules(color, manager.getAllSchedules());
+                waitEnter();
+            }
+            case 2 -> viewSchedulesByCategory();
+            case 3 -> viewSortedSchedules();
+            case 0 -> {
+                return;
+            }
+            default -> {
+                view.printMessage(color, "Invalid menu.");
+                waitEnter();
             }
         }
     }
 
     private void viewSchedulesByCategory() {
-        while (true) {
-            view.printViewCategoryMenu(color);
-            int menu = inputInt("Select category: ");
+        view.printViewCategoryMenu(color);
+        int menu = inputInt("Select category: ");
 
-            switch (menu) {
-                case 1 -> {
-                    view.printSchedules(color, manager.getSchedulesByCategory(Category.EXAM));
-                    waitEnter();
-                }
-                case 2 -> {
-                    view.printSchedules(color, manager.getSchedulesByCategory(Category.ASSIGNMENT));
-                    waitEnter();
-                }
-                case 3 -> {
-                    view.printSchedules(color, manager.getSchedulesByCategory(Category.FIXED));
-                    waitEnter();
-                }
-                case 4 -> {
-                    view.printSchedules(color, manager.getSchedulesByCategory(Category.GENERAL));
-                    waitEnter();
-                }
-                case 0 -> {
-                    return;
-                }
-                default -> {
-                    view.printMessage(color, "Invalid menu.");
-                    waitEnter();
-                }
+        switch (menu) {
+            case 1 -> {
+                view.printSchedules(color, manager.getSchedulesByCategory(Category.EXAM));
+                waitEnter();
+            }
+            case 2 -> {
+                view.printSchedules(color, manager.getSchedulesByCategory(Category.ASSIGNMENT));
+                waitEnter();
+            }
+            case 3 -> {
+                view.printSchedules(color, manager.getSchedulesByCategory(Category.FIXED));
+                waitEnter();
+            }
+            case 4 -> {
+                view.printSchedules(color, manager.getSchedulesByCategory(Category.GENERAL));
+                waitEnter();
+            }
+            case 0 -> {
+                return;
+            }
+            default -> {
+                view.printMessage(color, "Invalid category.");
+                waitEnter();
             }
         }
     }
 
     private void viewSortedSchedules() {
-        while (true) {
-            view.printSortMenu(color);
-            int menu = inputInt("Select sort option: ");
+        view.printSortMenu(color);
+        int menu = inputInt("Select sort option: ");
 
-            switch (menu) {
-                case 1 -> {
-                    view.printSchedules(color, manager.getSchedulesSortedByStatus());
-                    waitEnter();
-                }
-                case 2 -> {
-                    view.printSchedules(color, manager.getSchedulesSortedByAddedOrder());
-                    waitEnter();
-                }
-                case 3 -> {
-                    view.printSchedules(color, manager.getSchedulesSortedByNearestDate());
-                    waitEnter();
-                }
-                case 4 -> {
-                    view.printSchedules(color, manager.getSchedulesSortedByPriority());
-                    waitEnter();
-                }
-                case 0 -> {
-                    return;
-                }
-                default -> {
-                    view.printMessage(color, "Invalid menu.");
-                    waitEnter();
-                }
+        switch (menu) {
+            case 1 -> {
+                view.printSchedules(color, manager.getSchedulesSortedByStatus());
+                waitEnter();
+            }
+            case 2 -> {
+                view.printSchedules(color, manager.getSchedulesSortedByAddedOrder());
+                waitEnter();
+            }
+            case 3 -> {
+                view.printSchedules(color, manager.getSchedulesSortedByNearestDate());
+                waitEnter();
+            }
+            case 4 -> {
+                view.printSchedules(color, manager.getSchedulesSortedByPriority());
+                waitEnter();
+            }
+            case 0 -> {
+                return;
+            }
+            default -> {
+                view.printMessage(color, "Invalid sort option.");
+                waitEnter();
             }
         }
     }
@@ -259,144 +254,181 @@ public class Controller {
             return;
         }
 
-        editCommonFields(schedule);
+        while (true) {
+            printEditMenu(schedule);
+            int choice = inputInt("Select field to edit: ");
+
+            if (choice == 0) {
+                view.printMessage(color, "Schedule updated.");
+                waitEnter();
+                return;
+            }
+
+            boolean edited = editSelectedField(schedule, choice);
+
+            if (!edited) {
+                view.printMessage(color, "Invalid menu.");
+                waitEnter();
+            }
+        }
+    }
+
+    private void printEditMenu(Schedule schedule) {
+        view.printTitle(color);
+        System.out.println("Editing: " + schedule.getTitle() + " [" + schedule.getCategory() + "]");
+        System.out.println("----------------------------------");
+        System.out.println("1. Detail");
+        System.out.println("2. Priority");
+        System.out.println("3. Status");
+
+        if (schedule instanceof Exam) {
+            System.out.println("4. Subject");
+            System.out.println("5. Location");
+            System.out.println("6. Date");
+            System.out.println("7. Time");
+        } else if (schedule instanceof Assignment) {
+            System.out.println("4. Subject");
+            System.out.println("5. Submission Type");
+            System.out.println("6. Due Date");
+            System.out.println("7. Due Time");
+        } else if (schedule instanceof Fixed) {
+            System.out.println("4. Title");
+            System.out.println("5. Day Of Week");
+            System.out.println("6. Time");
+            System.out.println("7. Place");
+        } else if (schedule instanceof General) {
+            System.out.println("4. Title");
+            System.out.println("5. Date");
+            System.out.println("6. Time");
+            System.out.println("7. Place");
+        }
+
+        System.out.println("0. Finish");
+        System.out.println();
+    }
+
+    private boolean editSelectedField(Schedule schedule, int choice) {
+        switch (choice) {
+            case 1 -> {
+                schedule.setDetail(input("New Detail: "));
+                return true;
+            }
+            case 2 -> {
+                schedule.setPriority(inputPriority());
+                return true;
+            }
+            case 3 -> {
+                schedule.setStatus(inputStatus());
+                return true;
+            }
+        }
 
         if (schedule instanceof Exam exam) {
-            editExam(exam);
+            return editExamField(exam, choice);
         } else if (schedule instanceof Assignment assignment) {
-            editAssignment(assignment);
+            return editAssignmentField(assignment, choice);
         } else if (schedule instanceof Fixed fixed) {
-            editFixed(fixed);
+            return editFixedField(fixed, choice);
         } else if (schedule instanceof General general) {
-            editGeneral(general);
+            return editGeneralField(general, choice);
         }
 
-        view.printMessage(color, "Schedule updated.");
-        waitEnter();
+        return false;
     }
 
-    private void editCommonFields(Schedule schedule) {
-        String detail = inputOptional("Detail (" + schedule.getDetail() + "): ");
-        if (!detail.isBlank()) {
-            schedule.setDetail(detail);
-        }
-
-        Priority priority = inputOptionalPriority("Priority (" + schedule.getPriority() + ")");
-        if (priority != null) {
-            schedule.setPriority(priority);
-        }
-
-        Status status = inputOptionalStatus("Status (" + schedule.getStatus() + ")");
-        if (status != null) {
-            schedule.setStatus(status);
-        }
-    }
-
-    private void editExam(Exam exam) {
-        String subject = inputOptional("Subject (" + exam.getSubject() + "): ");
-        if (!subject.isBlank()) {
-            exam.setSubject(subject);
-        }
-
-        String location = inputOptional("Location (" + exam.getLocation() + "): ");
-        if (!location.isBlank()) {
-            exam.setLocation(location);
-        }
-
-        LocalDate date = inputOptionalDateWithoutYear("Date (" + exam.getFormattedDate() + ")");
-        if (date != null) {
-            exam.setDate(date);
-        }
-
-        LocalTime time = inputOptionalTime("Time (" + exam.getTime() + "): ");
-        if (time != null) {
-            exam.setTime(time);
+    private boolean editExamField(Exam exam, int choice) {
+        switch (choice) {
+            case 4 -> {
+                exam.setSubject(input("New Subject: "));
+                return true;
+            }
+            case 5 -> {
+                exam.setLocation(input("New Location: "));
+                return true;
+            }
+            case 6 -> {
+                exam.setDate(inputDateWithoutYear("New Date (MM-dd): "));
+                return true;
+            }
+            case 7 -> {
+                exam.setTime(inputTime("New Time (HH:mm): "));
+                return true;
+            }
+            default -> {
+                return false;
+            }
         }
     }
 
-    private void editAssignment(Assignment assignment) {
-        String title = inputOptional("Title (" + assignment.getTitle() + "): ");
-        if (!title.isBlank()) {
-            assignment.setTitle(title);
-        }
-
-        String subject = inputOptional("Subject (" + assignment.getSubject() + "): ");
-        if (!subject.isBlank()) {
-            assignment.setSubject(subject);
-        }
-
-        String detail = inputOptional("Detail (" + assignment.getDetail() + "): ");
-        if (!detail.isBlank()) {
-            assignment.setDetail(detail);
-        }
-
-        String submissionType = inputOptional("Submission Type (" + assignment.getSubmissionType() + "): ");
-        if (!submissionType.isBlank()) {
-            assignment.setSubmissionType(submissionType);
-        }
-
-        LocalDate date = inputOptionalDateWithoutYear("Due Date (" + assignment.getFormattedDate() + ")");
-        if (date != null) {
-            assignment.setDate(date);
-        }
-
-        LocalTime time = inputOptionalTime("Due Time (" + assignment.getTime() + "): ");
-        if (time != null) {
-            assignment.setTime(time);
+    private boolean editAssignmentField(Assignment assignment, int choice) {
+        switch (choice) {
+            case 4 -> {
+                assignment.setSubject(input("New Subject: "));
+                return true;
+            }
+            case 5 -> {
+                assignment.setSubmissionType(input("New Submission Type: "));
+                return true;
+            }
+            case 6 -> {
+                assignment.setDate(inputDateWithoutYear("New Due Date (MM-dd): "));
+                return true;
+            }
+            case 7 -> {
+                assignment.setTime(inputTime("New Due Time (HH:mm): "));
+                return true;
+            }
+            default -> {
+                return false;
+            }
         }
     }
 
-    private void editFixed(Fixed fixed) {
-        String title = inputOptional("Title (" + fixed.getTitle() + "): ");
-        if (!title.isBlank()) {
-            fixed.setTitle(title);
-        }
-
-        String detail = inputOptional("Detail (" + fixed.getDetail() + "): ");
-        if (!detail.isBlank()) {
-            fixed.setDetail(detail);
-        }
-
-        DayOfWeek dayOfWeek = inputOptionalDayOfWeek("Day Of Week (" + fixed.getDayOfWeek() + ")");
-        if (dayOfWeek != null) {
-            fixed.setDayOfWeek(dayOfWeek);
-        }
-
-        LocalTime time = inputOptionalTime("Time (" + fixed.getTime() + "): ");
-        if (time != null) {
-            fixed.setTime(time);
-        }
-
-        String place = inputOptional("Place (" + fixed.getPlace() + "): ");
-        if (!place.isBlank()) {
-            fixed.setPlace(place);
+    private boolean editFixedField(Fixed fixed, int choice) {
+        switch (choice) {
+            case 4 -> {
+                fixed.setTitle(input("New Title: "));
+                return true;
+            }
+            case 5 -> {
+                fixed.setDayOfWeek(inputDayOfWeek());
+                return true;
+            }
+            case 6 -> {
+                fixed.setTime(inputTime("New Time (HH:mm): "));
+                return true;
+            }
+            case 7 -> {
+                fixed.setPlace(input("New Place: "));
+                return true;
+            }
+            default -> {
+                return false;
+            }
         }
     }
 
-    private void editGeneral(General general) {
-        String title = inputOptional("Title (" + general.getTitle() + "): ");
-        if (!title.isBlank()) {
-            general.setTitle(title);
-        }
-
-        String detail = inputOptional("Detail (" + general.getDetail() + "): ");
-        if (!detail.isBlank()) {
-            general.setDetail(detail);
-        }
-
-        LocalDate date = inputOptionalDateWithoutYear("Date (" + general.getFormattedDate() + ")");
-        if (date != null) {
-            general.setDate(date);
-        }
-
-        LocalTime time = inputOptionalTime("Time (" + general.getTime() + "): ");
-        if (time != null) {
-            general.setTime(time);
-        }
-
-        String place = inputOptional("Place (" + general.getPlace() + "): ");
-        if (!place.isBlank()) {
-            general.setPlace(place);
+    private boolean editGeneralField(General general, int choice) {
+        switch (choice) {
+            case 4 -> {
+                general.setTitle(input("New Title: "));
+                return true;
+            }
+            case 5 -> {
+                general.setDate(inputDateWithoutYear("New Date (MM-dd): "));
+                return true;
+            }
+            case 6 -> {
+                general.setTime(inputTime("New Time (HH:mm): "));
+                return true;
+            }
+            case 7 -> {
+                general.setPlace(input("New Place: "));
+                return true;
+            }
+            default -> {
+                return false;
+            }
         }
     }
 
@@ -450,11 +482,6 @@ public class Controller {
         return sc.nextLine();
     }
 
-    private String inputOptional(String message) {
-        System.out.print(message);
-        return sc.nextLine();
-    }
-
     private int inputInt(String message) {
         while (true) {
             try {
@@ -472,28 +499,9 @@ public class Controller {
                 System.out.print(message);
                 String input = sc.nextLine();
                 String[] parts = input.split("-");
-                if (parts.length != 2) throw new IllegalArgumentException();
-
-                int month = Integer.parseInt(parts[0]);
-                int day = Integer.parseInt(parts[1]);
-
-                return LocalDate.of(LocalDate.now().getYear(), month, day);
-            } catch (Exception e) {
-                System.out.println("Invalid date format. Use MM-dd.");
-            }
-        }
-    }
-
-    private LocalDate inputOptionalDateWithoutYear(String message) {
-        while (true) {
-            try {
-                System.out.print(message + " (Enter만 누르면 유지): ");
-                String input = sc.nextLine();
-
-                if (input.isBlank()) return null;
-
-                String[] parts = input.split("-");
-                if (parts.length != 2) throw new IllegalArgumentException();
+                if (parts.length != 2) {
+                    throw new IllegalArgumentException();
+                }
 
                 int month = Integer.parseInt(parts[0]);
                 int day = Integer.parseInt(parts[1]);
@@ -510,19 +518,6 @@ public class Controller {
             try {
                 System.out.print(message);
                 return LocalTime.parse(sc.nextLine());
-            } catch (Exception e) {
-                System.out.println("Invalid time format. Use HH:mm.");
-            }
-        }
-    }
-
-    private LocalTime inputOptionalTime(String message) {
-        while (true) {
-            try {
-                System.out.print(message);
-                String input = sc.nextLine();
-                if (input.isBlank()) return null;
-                return LocalTime.parse(input);
             } catch (Exception e) {
                 System.out.println("Invalid time format. Use HH:mm.");
             }
@@ -549,44 +544,18 @@ public class Controller {
         }
     }
 
-    private Priority inputOptionalPriority(String message) {
-        while (true) {
-            view.printPriorityGuide();
-            System.out.print(message + " (Enter만 누르면 유지): ");
-            String input = sc.nextLine();
-
-            if (input.isBlank()) return null;
-
-            switch (input) {
-                case "1" -> {
-                    return Priority.HIGH;
-                }
-                case "2" -> {
-                    return Priority.MEDIUM;
-                }
-                case "3" -> {
-                    return Priority.LOW;
-                }
-                default -> System.out.println("Invalid priority.");
-            }
-        }
-    }
-
-    private Status inputOptionalStatus(String message) {
+    private Status inputStatus() {
         while (true) {
             System.out.println("Status:");
             System.out.println("1. TODO");
             System.out.println("2. DONE");
-            System.out.print(message + " (Enter만 누르면 유지): ");
-            String input = sc.nextLine();
+            int choice = inputInt("Select status: ");
 
-            if (input.isBlank()) return null;
-
-            switch (input) {
-                case "1" -> {
+            switch (choice) {
+                case 1 -> {
                     return Status.TODO;
                 }
-                case "2" -> {
+                case 2 -> {
                     return Status.DONE;
                 }
                 default -> System.out.println("Invalid status.");
@@ -619,41 +588,6 @@ public class Controller {
                     return DayOfWeek.SATURDAY;
                 }
                 case 7 -> {
-                    return DayOfWeek.SUNDAY;
-                }
-                default -> System.out.println("Invalid day.");
-            }
-        }
-    }
-
-    private DayOfWeek inputOptionalDayOfWeek(String message) {
-        while (true) {
-            view.printDayOfWeekGuide();
-            System.out.print(message + " (Enter만 누르면 유지): ");
-            String input = sc.nextLine();
-
-            if (input.isBlank()) return null;
-
-            switch (input) {
-                case "1" -> {
-                    return DayOfWeek.MONDAY;
-                }
-                case "2" -> {
-                    return DayOfWeek.TUESDAY;
-                }
-                case "3" -> {
-                    return DayOfWeek.WEDNESDAY;
-                }
-                case "4" -> {
-                    return DayOfWeek.THURSDAY;
-                }
-                case "5" -> {
-                    return DayOfWeek.FRIDAY;
-                }
-                case "6" -> {
-                    return DayOfWeek.SATURDAY;
-                }
-                case "7" -> {
                     return DayOfWeek.SUNDAY;
                 }
                 default -> System.out.println("Invalid day.");

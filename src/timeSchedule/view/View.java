@@ -1,5 +1,6 @@
 package timeSchedule.view;
 
+import timeSchedule.model.Priority;
 import timeSchedule.model.Schedule;
 
 import java.util.List;
@@ -131,12 +132,13 @@ public class View {
 
     private void printCard(Schedule s) {
         String statusText;
-
         if (s.getStatus().toString().equals("DONE")) {
             statusText = GREEN + BOLD + "V" + RESET;
         } else {
             statusText = RED + "X" + RESET;
         }
+
+        String priorityText = formatPriority(s.getPriority());
 
         System.out.println(
                 WHITE + BOLD +
@@ -152,9 +154,19 @@ public class View {
                         s.getFormattedDate() + " " +
                         (s.getTime() == null ? "" : s.getTime()) +
                         "   " +
+                        priorityText +
+                        "   " +
                         statusText
         );
 
         System.out.println();
+    }
+
+    private String formatPriority(Priority priority) {
+        return switch (priority) {
+            case HIGH -> "●●●";
+            case MEDIUM -> "●●";
+            case LOW -> "●";
+        };
     }
 }
