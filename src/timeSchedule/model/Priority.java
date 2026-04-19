@@ -14,4 +14,13 @@ public enum Priority {
     public int getValue() {
         return value;
     }
+
+    public static Priority fromMenuChoice(int choice) {
+        return switch (choice) {
+            case 1 -> HIGH;
+            case 2 -> MEDIUM;
+            case 3 -> LOW;
+            default -> null;
+        };
+    }
 }

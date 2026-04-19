@@ -1,20 +1,12 @@
 package timeSchedule.model;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ScheduleManager {
-    private final ArrayList<Schedule> schedules;
-    private int nextId;
-    private int nextOrder;
-
-    public ScheduleManager() {
-        schedules = new ArrayList<>();
-        nextId = 1;
-        nextOrder = 1;
-    }
+    private final ArrayList<Schedule> schedules = new ArrayList<>();
+    private int nextId    = 1;
+    private int nextOrder = 1;
 
     public void addSchedule(Schedule schedule) {
         schedule.setId(nextId++);
@@ -26,79 +18,42 @@ public class ScheduleManager {
         return new ArrayList<>(schedules);
     }
 
-    public List<Schedule> getSchedulesSortedByStatus() {
-        ArrayList<Schedule> list = new ArrayList<>(schedules);
-        list.sort(
-                Comparator.comparing(Schedule::getStatus)
-                        .thenComparing(Schedule::getSortDate, Comparator.nullsLast(Comparator.naturalOrder()))
-                        .thenComparing(Schedule::getTime, Comparator.nullsLast(Comparator.naturalOrder()))
-        );
-        return list;
-    }
-
-    public List<Schedule> getSchedulesSortedByAddedOrder() {
-        ArrayList<Schedule> list = new ArrayList<>(schedules);
-        list.sort(Comparator.comparingInt(Schedule::getAddedOrder));
-        return list;
-    }
-
-    public List<Schedule> getSchedulesSortedByNearestDate() {
-        ArrayList<Schedule> list = new ArrayList<>(schedules);
-        list.sort(
-                Comparator.comparing(Schedule::getSortDate, Comparator.nullsLast(Comparator.naturalOrder()))
-                        .thenComparing(Schedule::getTime, Comparator.nullsLast(Comparator.naturalOrder()))
-        );
-        return list;
-    }
-
-    public List<Schedule> getSchedulesSortedByPriority() {
-        ArrayList<Schedule> list = new ArrayList<>(schedules);
-        list.sort(
-                Comparator.comparingInt((Schedule s) -> s.getPriority().getValue())
-                        .thenComparing(Schedule::getSortDate, Comparator.nullsLast(Comparator.naturalOrder()))
-                        .thenComparing(Schedule::getTime, Comparator.nullsLast(Comparator.naturalOrder()))
-        );
+    /**
+     * Returns all schedules sorted by the given strategy.
+     * Replaces the previous four near-duplicate getSchedulesSortedBy* methods.
+     */
+    public List<Schedule> getSchedulesSortedBy(SortOption option) {
+        List<Schedule> list = new ArrayList<>(schedules);
+        list.sort(option.comparator());
         return list;
     }
 
     public List<Schedule> getSchedulesByCategory(Category category) {
-        ArrayList<Schedule> list = new ArrayList<>();
-        for (Schedule schedule : schedules) {
-            if (schedule.getCategory() == category) {
-                list.add(schedule);
-            }
+        List<Schedule> list = new ArrayList<>();
+        for (Schedule s : schedules) {
+            if (s.getCategory() == category) list.add(s);
         }
-        list.sort(
-                Comparator.comparing(Schedule::getSortDate, Comparator.nullsLast(Comparator.naturalOrder()))
-                        .thenComparing(Schedule::getTime, Comparator.nullsLast(Comparator.naturalOrder()))
-        );
+        list.sort(SortOption.NEAREST_DATE.comparator());
         return list;
     }
 
     public Schedule findById(int id) {
-        for (Schedule schedule : schedules) {
-            if (schedule.getId() == id) {
-                return schedule;
-            }
+        for (Schedule s : schedules) {
+            if (s.getId() == id) return s;
         }
         return null;
     }
 
     public boolean markAsDone(int id) {
-        Schedule schedule = findById(id);
-        if (schedule == null) {
-            return false;
-        }
-        schedule.setStatus(Status.DONE);
+        Schedule s = findById(id);
+        if (s == null) return false;
+        s.setStatus(Status.DONE);
         return true;
     }
 
     public boolean deleteSchedule(int id) {
-        Schedule schedule = findById(id);
-        if (schedule == null) {
-            return false;
-        }
-        schedules.remove(schedule);
-        return true;
+        Schedule s = findById(id);
+        if (s == null) return false;
+        return schedules.remove(s);
     }
 }

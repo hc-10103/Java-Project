@@ -1,5 +1,6 @@
 package timeSchedule.view;
 
+import timeSchedule.model.EditableField;
 import timeSchedule.model.Priority;
 import timeSchedule.model.Schedule;
 
@@ -146,6 +147,25 @@ public class View {
             System.out.println(String.format("%-8s : %s", line[0], line[1]));
         }
 
+        System.out.println();
+    }
+
+    /**
+     * Polymorphic edit menu — rendered from the list of fields the schedule itself
+     * reports. The View doesn't care what kind of Schedule it's given.
+     */
+    public void printEditMenu(String color, Schedule schedule, List<EditableField> fields) {
+        printTitle(color);
+        System.out.println(
+                BOLD + "Editing: " + schedule.getTitle() + RESET +
+                        " " +
+                        GRAY + "[" + schedule.getCategory() + "]" + RESET
+        );
+        System.out.println("----------------------------------");
+        for (int i = 0; i < fields.size(); i++) {
+            System.out.println((i + 1) + ". " + fields.get(i).getLabel());
+        }
+        System.out.println("0. Finish");
         System.out.println();
     }
 
