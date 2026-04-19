@@ -120,10 +120,10 @@ From any schedule list, entering a schedule ID opens its detail card — showing
 
 Select `3`, enter the schedule's ID, and its status flips from `TODO` (X) to `DONE` (V). The change is immediately reflected in the schedule list.
 
-<p align="center">
-  <img src="images/done.png" alt="Mark as Done Command" width="48%">
-  <img src="images/done_result.png" alt="Mark as Done Result" width="48%">
-</p>
+![Mark as Done Command](images/done.png)
+<br>
+![Mark as Done Result](images/done_result.png)
+
 
 ---
 
