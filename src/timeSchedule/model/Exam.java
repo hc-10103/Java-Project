@@ -2,14 +2,14 @@ package timeSchedule.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Collections;
+import java.util.List;
 
 public class Exam extends Schedule {
     private String subject;
     private String location;
 
-    public Exam(String subject, String detail, Priority priority,
-                LocalDate date, LocalTime time,
-                String location) {
+    public Exam(String subject, String detail, Priority priority, LocalDate date, LocalTime time, String location) {
         super(subject, detail, priority, Category.EXAM, date, time);
         this.subject = subject;
         this.location = location;
@@ -33,12 +33,14 @@ public class Exam extends Schedule {
     }
 
     @Override
-    public String getDisplayString() {
-        return getTitle();
+    public LocalDate getSortDate() {
+        return getDate();
     }
 
     @Override
-    public LocalDate getSortDate() {
-        return getDate();
+    public List<String[]> getDetailLines() {
+        return Collections.singletonList(
+                new String[]{"Location", location}
+        );
     }
 }

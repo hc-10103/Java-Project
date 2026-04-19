@@ -18,77 +18,71 @@ public class View {
 
     public void printMainMenu(String color) {
         printTitle(color);
-        System.out.println(BOLD + "MAIN MENU" + RESET);
-        System.out.println("----------------------------------");
-        System.out.println("1. Add Schedule");
-        System.out.println("2. View Schedules");
-        System.out.println("3. Mark as Done");
-        System.out.println("4. Edit Schedule");
-        System.out.println("5. Delete Schedule");
-        System.out.println("6. Change Colors");
-        System.out.println("0. Exit");
-        System.out.println();
+        printMenu("MAIN MENU", new String[]{
+                "1. Add Schedule",
+                "2. View Schedules",
+                "3. Mark as Done",
+                "4. Edit Schedule",
+                "5. Delete Schedule",
+                "6. Change Colors",
+                "0. Exit"
+        });
     }
 
     public void printCategoryMenu(String color) {
         printTitle(color);
-        System.out.println(BOLD + "SELECT CATEGORY" + RESET);
-        System.out.println("----------------------------------");
-        System.out.println("1. Exam");
-        System.out.println("2. Assignment");
-        System.out.println("3. Fixed");
-        System.out.println("4. General");
-        System.out.println("0. Back");
-        System.out.println();
+        printMenu("SELECT CATEGORY", new String[]{
+                "1. Exam",
+                "2. Assignment",
+                "3. Fixed",
+                "4. General",
+                "0. Back"
+        });
     }
 
     public void printViewMenu(String color) {
         printTitle(color);
-        System.out.println(BOLD + "VIEW SCHEDULES" + RESET);
-        System.out.println("----------------------------------");
-        System.out.println("1. View All");
-        System.out.println("2. View by Category");
-        System.out.println("3. Sort Schedules");
-        System.out.println("0. Back");
-        System.out.println();
+        printMenu("VIEW SCHEDULES", new String[]{
+                "1. View All",
+                "2. View by Category",
+                "3. Sort Schedules",
+                "0. Back"
+        });
     }
 
     public void printViewCategoryMenu(String color) {
         printTitle(color);
-        System.out.println(BOLD + "VIEW BY CATEGORY" + RESET);
-        System.out.println("----------------------------------");
-        System.out.println("1. Exam");
-        System.out.println("2. Assignment");
-        System.out.println("3. Fixed");
-        System.out.println("4. General");
-        System.out.println("0. Back");
-        System.out.println();
+        printMenu("VIEW BY CATEGORY", new String[]{
+                "1. Exam",
+                "2. Assignment",
+                "3. Fixed",
+                "4. General",
+                "0. Back"
+        });
     }
 
     public void printSortMenu(String color) {
         printTitle(color);
-        System.out.println(BOLD + "SORT SCHEDULES" + RESET);
-        System.out.println("----------------------------------");
-        System.out.println("1. By Status");
-        System.out.println("2. By Added Order");
-        System.out.println("3. By Nearest Date");
-        System.out.println("4. By Priority");
-        System.out.println("0. Back");
-        System.out.println();
+        printMenu("SORT SCHEDULES", new String[]{
+                "1. By Status",
+                "2. By Added Order",
+                "3. By Nearest Date",
+                "4. By Priority",
+                "0. Back"
+        });
     }
 
     public void printColorMenu(String color) {
         printTitle(color);
-        System.out.println(BOLD + "CHANGE COLOR THEME" + RESET);
-        System.out.println("----------------------------------");
-        System.out.println("1. White");
-        System.out.println("2. Cyan");
-        System.out.println("3. Green");
-        System.out.println("4. Yellow");
-        System.out.println("5. Red");
-        System.out.println("6. Purple");
-        System.out.println("0. Back");
-        System.out.println();
+        printMenu("CHANGE COLOR THEME", new String[]{
+                "1. White",
+                "2. Cyan",
+                "3. Green",
+                "4. Yellow",
+                "5. Red",
+                "6. Purple",
+                "0. Back"
+        });
     }
 
     public void printPriorityGuide() {
@@ -123,6 +117,36 @@ public class View {
         for (Schedule schedule : schedules) {
             printCard(schedule);
         }
+
+        System.out.println(GRAY + "Enter an ID to view details, or 0 to go back." + RESET);
+        System.out.println();
+    }
+
+    public void printScheduleDetail(String color, Schedule schedule) {
+        printTitle(color);
+
+        String statusText = schedule.getStatus().toString().equals("DONE")
+                ? GREEN + BOLD + "V" + RESET
+                : RED + "X" + RESET;
+
+        System.out.println(
+                WHITE + BOLD + schedule.getTitle() + RESET +
+                        " " +
+                        GRAY + "[" + schedule.getCategory() + "]" + RESET
+        );
+        System.out.println("----------------------------------------");
+        System.out.println("ID       : " + schedule.getId());
+        System.out.println("Date     : " + schedule.getFormattedDate());
+        System.out.println("Time     : " + (schedule.getTime() == null ? "-" : schedule.getTime()));
+        System.out.println("Priority : " + formatPriority(schedule.getPriority()));
+        System.out.println("Status   : " + statusText);
+        System.out.println("Detail   : " + schedule.getDetail());
+
+        for (String[] line : schedule.getDetailLines()) {
+            System.out.println(String.format("%-8s : %s", line[0], line[1]));
+        }
+
+        System.out.println();
     }
 
     public void printMessage(String color, String message) {
@@ -130,31 +154,35 @@ public class View {
         System.out.println();
     }
 
-    private void printCard(Schedule s) {
-        String statusText;
-        if (s.getStatus().toString().equals("DONE")) {
-            statusText = GREEN + BOLD + "V" + RESET;
-        } else {
-            statusText = RED + "X" + RESET;
+    private void printMenu(String header, String[] items) {
+        System.out.println(BOLD + header + RESET);
+        System.out.println("----------------------------------");
+        for (String item : items) {
+            System.out.println(item);
         }
+        System.out.println();
+    }
 
-        String priorityText = formatPriority(s.getPriority());
+    private void printCard(Schedule schedule) {
+        String statusText = schedule.getStatus().toString().equals("DONE")
+                ? GREEN + BOLD + "V" + RESET
+                : RED + "X" + RESET;
 
         System.out.println(
                 WHITE + BOLD +
-                        "[" + s.getId() + "] " +
-                        s.getTitle() +
+                        "[" + schedule.getId() + "] " +
+                        schedule.getTitle() +
                         RESET +
                         " " +
-                        GRAY + "[" + s.getCategory() + "]" + RESET
+                        GRAY + "[" + schedule.getCategory() + "]" + RESET
         );
 
         System.out.println(
                 "    " +
-                        s.getFormattedDate() + " " +
-                        (s.getTime() == null ? "" : s.getTime()) +
+                        schedule.getFormattedDate() + " " +
+                        (schedule.getTime() == null ? "" : schedule.getTime()) +
                         "   " +
-                        priorityText +
+                        formatPriority(schedule.getPriority()) +
                         "   " +
                         statusText
         );

@@ -15,6 +15,7 @@ import timeSchedule.view.View;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Scanner;
 
 public class Controller {
@@ -46,10 +47,7 @@ public class Controller {
                     view.printMessage(color, "Program terminated.");
                     return;
                 }
-                default -> {
-                    view.printMessage(color, "Invalid menu.");
-                    waitEnter();
-                }
+                default -> showMessageAndPause("Invalid menu.");
             }
         }
     }
@@ -67,10 +65,7 @@ public class Controller {
             case 2 -> addAssignment();
             case 3 -> addFixed();
             case 4 -> addGeneral();
-            default -> {
-                view.printMessage(color, "Invalid category.");
-                waitEnter();
-            }
+            default -> showMessageAndPause("Invalid category.");
         }
     }
 
@@ -82,11 +77,8 @@ public class Controller {
         LocalTime time = inputTime("Time (HH:mm): ");
         Priority priority = inputPriority();
 
-        Exam exam = new Exam(subject, detail, priority, date, time, location);
-        manager.addSchedule(exam);
-
-        view.printMessage(color, "Exam schedule added.");
-        waitEnter();
+        manager.addSchedule(new Exam(subject, detail, priority, date, time, location));
+        showMessageAndPause("Exam schedule added.");
     }
 
     private void addAssignment() {
@@ -97,11 +89,8 @@ public class Controller {
         LocalTime time = inputTime("Due Time (HH:mm): ");
         Priority priority = inputPriority();
 
-        Assignment assignment = new Assignment(subject, detail, priority, date, time, submissionType);
-        manager.addSchedule(assignment);
-
-        view.printMessage(color, "Assignment schedule added.");
-        waitEnter();
+        manager.addSchedule(new Assignment(subject, detail, priority, date, time, submissionType));
+        showMessageAndPause("Assignment schedule added.");
     }
 
     private void addFixed() {
@@ -112,11 +101,8 @@ public class Controller {
         String place = input("Place: ");
         Priority priority = inputPriority();
 
-        Fixed fixed = new Fixed(title, detail, priority, dayOfWeek, time, place);
-        manager.addSchedule(fixed);
-
-        view.printMessage(color, "Fixed schedule added.");
-        waitEnter();
+        manager.addSchedule(new Fixed(title, detail, priority, dayOfWeek, time, place));
+        showMessageAndPause("Fixed schedule added.");
     }
 
     private void addGeneral() {
@@ -127,11 +113,8 @@ public class Controller {
         String place = input("Place: ");
         Priority priority = inputPriority();
 
-        General general = new General(title, detail, priority, date, time, place);
-        manager.addSchedule(general);
-
-        view.printMessage(color, "General schedule added.");
-        waitEnter();
+        manager.addSchedule(new General(title, detail, priority, date, time, place));
+        showMessageAndPause("General schedule added.");
     }
 
     private void viewSchedules() {
@@ -139,19 +122,12 @@ public class Controller {
         int menu = inputInt("Select: ");
 
         switch (menu) {
-            case 1 -> {
-                view.printSchedules(color, manager.getAllSchedules());
-                waitEnter();
-            }
+            case 1 -> showScheduleListWithDetail(manager.getAllSchedules());
             case 2 -> viewSchedulesByCategory();
             case 3 -> viewSortedSchedules();
             case 0 -> {
-                return;
             }
-            default -> {
-                view.printMessage(color, "Invalid menu.");
-                waitEnter();
-            }
+            default -> showMessageAndPause("Invalid menu.");
         }
     }
 
@@ -160,29 +136,13 @@ public class Controller {
         int menu = inputInt("Select category: ");
 
         switch (menu) {
-            case 1 -> {
-                view.printSchedules(color, manager.getSchedulesByCategory(Category.EXAM));
-                waitEnter();
-            }
-            case 2 -> {
-                view.printSchedules(color, manager.getSchedulesByCategory(Category.ASSIGNMENT));
-                waitEnter();
-            }
-            case 3 -> {
-                view.printSchedules(color, manager.getSchedulesByCategory(Category.FIXED));
-                waitEnter();
-            }
-            case 4 -> {
-                view.printSchedules(color, manager.getSchedulesByCategory(Category.GENERAL));
-                waitEnter();
-            }
+            case 1 -> showScheduleListWithDetail(manager.getSchedulesByCategory(Category.EXAM));
+            case 2 -> showScheduleListWithDetail(manager.getSchedulesByCategory(Category.ASSIGNMENT));
+            case 3 -> showScheduleListWithDetail(manager.getSchedulesByCategory(Category.FIXED));
+            case 4 -> showScheduleListWithDetail(manager.getSchedulesByCategory(Category.GENERAL));
             case 0 -> {
-                return;
             }
-            default -> {
-                view.printMessage(color, "Invalid category.");
-                waitEnter();
-            }
+            default -> showMessageAndPause("Invalid category.");
         }
     }
 
@@ -191,36 +151,42 @@ public class Controller {
         int menu = inputInt("Select sort option: ");
 
         switch (menu) {
-            case 1 -> {
-                view.printSchedules(color, manager.getSchedulesSortedByStatus());
-                waitEnter();
-            }
-            case 2 -> {
-                view.printSchedules(color, manager.getSchedulesSortedByAddedOrder());
-                waitEnter();
-            }
-            case 3 -> {
-                view.printSchedules(color, manager.getSchedulesSortedByNearestDate());
-                waitEnter();
-            }
-            case 4 -> {
-                view.printSchedules(color, manager.getSchedulesSortedByPriority());
-                waitEnter();
-            }
+            case 1 -> showScheduleListWithDetail(manager.getSchedulesSortedByStatus());
+            case 2 -> showScheduleListWithDetail(manager.getSchedulesSortedByAddedOrder());
+            case 3 -> showScheduleListWithDetail(manager.getSchedulesSortedByNearestDate());
+            case 4 -> showScheduleListWithDetail(manager.getSchedulesSortedByPriority());
             case 0 -> {
-                return;
             }
-            default -> {
-                view.printMessage(color, "Invalid sort option.");
-                waitEnter();
-            }
+            default -> showMessageAndPause("Invalid sort option.");
         }
+    }
+
+    private void showScheduleListWithDetail(List<Schedule> schedules) {
+        view.printSchedules(color, schedules);
+
+        if (schedules.isEmpty()) {
+            waitEnter();
+            return;
+        }
+
+        int id = inputInt("Select ID: ");
+        if (id == 0) {
+            return;
+        }
+
+        Schedule schedule = manager.findById(id);
+        if (schedule == null) {
+            showMessageAndPause("Schedule not found.");
+            return;
+        }
+
+        view.printScheduleDetail(color, schedule);
+        waitEnter();
     }
 
     private void markAsDone() {
         if (manager.getAllSchedules().isEmpty()) {
-            view.printMessage(color, "No schedules to update.");
-            waitEnter();
+            showMessageAndPause("No schedules to update.");
             return;
         }
 
@@ -229,18 +195,15 @@ public class Controller {
         boolean result = manager.markAsDone(id);
 
         if (result) {
-            view.printMessage(color, "Schedule marked as DONE.");
+            showMessageAndPause("Schedule marked as DONE.");
         } else {
-            view.printMessage(color, "Schedule not found.");
+            showMessageAndPause("Schedule not found.");
         }
-
-        waitEnter();
     }
 
     private void editSchedule() {
         if (manager.getAllSchedules().isEmpty()) {
-            view.printMessage(color, "No schedules to edit.");
-            waitEnter();
+            showMessageAndPause("No schedules to edit.");
             return;
         }
 
@@ -249,8 +212,7 @@ public class Controller {
         Schedule schedule = manager.findById(id);
 
         if (schedule == null) {
-            view.printMessage(color, "Schedule not found.");
-            waitEnter();
+            showMessageAndPause("Schedule not found.");
             return;
         }
 
@@ -259,16 +221,12 @@ public class Controller {
             int choice = inputInt("Select field to edit: ");
 
             if (choice == 0) {
-                view.printMessage(color, "Schedule updated.");
-                waitEnter();
+                showMessageAndPause("Schedule updated.");
                 return;
             }
 
-            boolean edited = editSelectedField(schedule, choice);
-
-            if (!edited) {
-                view.printMessage(color, "Invalid menu.");
-                waitEnter();
+            if (!editSelectedField(schedule, choice)) {
+                showMessageAndPause("Invalid menu.");
             }
         }
     }
@@ -325,11 +283,14 @@ public class Controller {
 
         if (schedule instanceof Exam exam) {
             return editExamField(exam, choice);
-        } else if (schedule instanceof Assignment assignment) {
+        }
+        if (schedule instanceof Assignment assignment) {
             return editAssignmentField(assignment, choice);
-        } else if (schedule instanceof Fixed fixed) {
+        }
+        if (schedule instanceof Fixed fixed) {
             return editFixedField(fixed, choice);
-        } else if (schedule instanceof General general) {
+        }
+        if (schedule instanceof General general) {
             return editGeneralField(general, choice);
         }
 
@@ -434,8 +395,7 @@ public class Controller {
 
     private void deleteSchedule() {
         if (manager.getAllSchedules().isEmpty()) {
-            view.printMessage(color, "No schedules to delete.");
-            waitEnter();
+            showMessageAndPause("No schedules to delete.");
             return;
         }
 
@@ -444,12 +404,10 @@ public class Controller {
         boolean result = manager.deleteSchedule(id);
 
         if (result) {
-            view.printMessage(color, "Schedule deleted.");
+            showMessageAndPause("Schedule deleted.");
         } else {
-            view.printMessage(color, "Schedule not found.");
+            showMessageAndPause("Schedule not found.");
         }
-
-        waitEnter();
     }
 
     private void changeColors() {
@@ -467,13 +425,16 @@ public class Controller {
                 return;
             }
             default -> {
-                view.printMessage(color, "Invalid color.");
-                waitEnter();
+                showMessageAndPause("Invalid color.");
                 return;
             }
         }
 
-        view.printMessage(color, "Theme color changed.");
+        showMessageAndPause("Theme color changed.");
+    }
+
+    private void showMessageAndPause(String message) {
+        view.printMessage(color, message);
         waitEnter();
     }
 

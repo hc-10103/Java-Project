@@ -2,6 +2,7 @@ package timeSchedule.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public abstract class Schedule {
     private int id;
@@ -24,9 +25,9 @@ public abstract class Schedule {
         this.time = time;
     }
 
-    public abstract String getDisplayString();
-
     public abstract LocalDate getSortDate();
+
+    public abstract List<String[]> getDetailLines();
 
     public int getId() {
         return id;
@@ -76,6 +77,10 @@ public abstract class Schedule {
         this.priority = priority;
     }
 
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }
@@ -97,7 +102,9 @@ public abstract class Schedule {
     }
 
     public String getFormattedDate() {
-        if (getSortDate() == null) return "-";
+        if (getSortDate() == null) {
+            return "-";
+        }
 
         LocalDate d = getSortDate();
         String day = switch (d.getDayOfWeek()) {
