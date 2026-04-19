@@ -39,7 +39,7 @@ The project was implemented as a final assignment for the Object-Oriented Progra
 
 ## 2. Presentation Video
 
-▶ **YouTube**: https://youtu.be/955ffu-Kg2Y   English Ver. I am sorry.. My English is too bad... :(
+▶ **YouTube**: https://youtu.be/955ffu-Kg2Y   English presentation. I am sorry.. My English is too bad... :(
 
 ---
 
