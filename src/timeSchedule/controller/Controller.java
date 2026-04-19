@@ -70,13 +70,13 @@ public class Controller {
     }
 
     private Schedule createAssignment() {
-        String subject        = input.readLine("Subject: ");
+        String title          = input.readLine("Title: ");
         String detail         = input.readLine("Detail: ");
         String submissionType = input.readLine("Submission Type: ");
         LocalDate date        = input.readDateWithoutYear("Due Date (MM-dd): ");
         LocalTime time        = input.readTime("Due Time (HH:mm): ");
         Priority priority     = input.readPriority();
-        return new Assignment(subject, detail, priority, date, time, submissionType);
+        return new Assignment(title, detail, priority, date, time, submissionType);
     }
 
     private Schedule createFixed() {

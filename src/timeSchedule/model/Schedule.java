@@ -36,15 +36,21 @@ public abstract class Schedule {
 
     public final List<EditableField> getEditableFields() {
         List<EditableField> fields = new ArrayList<>();
-        fields.add(new EditableField("Detail",
-                in -> setDetail(in.readLine("New Detail: "))));
-        fields.add(new EditableField("Priority",
-                in -> setPriority(in.readPriority())));
-        fields.add(new EditableField("Status",
-                in -> setStatus(in.readStatus())));
-        addCategorySpecificFields(fields);
+        List<EditableField> specificFields = new ArrayList<>();
+
+        addCategorySpecificFields(specificFields);
+        if (!specificFields.isEmpty()) {
+            fields.add(specificFields.remove(0));
+        }
+
+        fields.add(new EditableField("Detail", in -> setDetail(in.readLine("New Detail: "))));
+        fields.add(new EditableField("Priority", in -> setPriority(in.readPriority())));
+        fields.add(new EditableField("Status", in -> setStatus(in.readStatus())));
+
+        fields.addAll(specificFields);
         return fields;
     }
+
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
