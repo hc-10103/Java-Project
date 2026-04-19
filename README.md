@@ -173,20 +173,7 @@ src/
         ├── View.java
         └── Color.java
 
-images/
-├── uml.png
-├── main.png
-├── add.png
-├── view_menu.png
-├── view_category.png
-├── view_sort.png
-├── detail.png
-├── done.png
-├── edit.png
-├── delete.png
-└── color.png
 
-README.md
 ```
 
 ---
