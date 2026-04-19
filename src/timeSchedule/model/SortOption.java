@@ -2,11 +2,6 @@ package timeSchedule.model;
 
 import java.util.Comparator;
 
-/**
- * Sort strategies for schedule lists. Each value carries its own Comparator,
- * so {@link ScheduleManager} no longer needs a separate method per sort mode —
- * classic Strategy-pattern-as-enum.
- */
 public enum SortOption {
     STATUS(
             Comparator.comparing(Schedule::getStatus)

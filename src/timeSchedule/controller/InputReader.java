@@ -10,10 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
 
-/**
- * Owns all user-input parsing for the console. Controller delegates here instead
- * of mixing scanner logic with business flow.
- */
+
 public class InputReader implements ScheduleInput {
     private final Scanner scanner;
     private final View view;

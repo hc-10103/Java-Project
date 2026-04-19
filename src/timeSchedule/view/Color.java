@@ -13,10 +13,7 @@ public class Color {
     public static final String CYAN = "\u001B[96m";
     public static final String GRAY = "\u001B[90m";
 
-    /**
-     * Maps a menu choice (1..6) to a theme color code.
-     * Returns {@code null} for any other value so the caller can treat it as invalid.
-     */
+
     public static String fromMenuChoice(int choice) {
         return switch (choice) {
             case 1 -> WHITE;

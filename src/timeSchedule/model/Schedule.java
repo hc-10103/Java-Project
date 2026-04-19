@@ -27,25 +27,13 @@ public abstract class Schedule {
         this.time = time;
     }
 
-    // === abstract hooks ===========================================
-
-    /** The date used for sorting. Concrete classes decide (e.g. Fixed = next occurrence). */
     public abstract LocalDate getSortDate();
 
-    /** Category-specific rows shown in the detail card. */
     public abstract List<String[]> getDetailLines();
 
-    /** Appends the category-specific editable fields after the common ones. */
     protected abstract void addCategorySpecificFields(List<EditableField> fields);
 
-    // === template method =========================================
 
-    /**
-     * Returns the editable fields for this schedule.
-     * Common fields (Detail / Priority / Status) are added here; subclasses
-     * append their own via {@link #addCategorySpecificFields(List)}.
-     * This removes the instanceof chain from Controller.
-     */
     public final List<EditableField> getEditableFields() {
         List<EditableField> fields = new ArrayList<>();
         fields.add(new EditableField("Detail",
@@ -57,8 +45,6 @@ public abstract class Schedule {
         addCategorySpecificFields(fields);
         return fields;
     }
-
-    // === getters / setters =======================================
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

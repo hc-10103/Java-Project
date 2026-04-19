@@ -150,10 +150,7 @@ public class View {
         System.out.println();
     }
 
-    /**
-     * Polymorphic edit menu — rendered from the list of fields the schedule itself
-     * reports. The View doesn't care what kind of Schedule it's given.
-     */
+
     public void printEditMenu(String color, Schedule schedule, List<EditableField> fields) {
         printTitle(color);
         System.out.println(

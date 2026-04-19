@@ -36,7 +36,6 @@ public class Controller {
         }
     }
 
-    // ===== add =====================================================
 
     private void addSchedule() {
         view.printCategoryMenu(color);
@@ -100,8 +99,6 @@ public class Controller {
         return new General(title, detail, priority, date, time, place);
     }
 
-    // ===== view ====================================================
-
     private void viewSchedules() {
         view.printViewMenu(color);
         int menu = input.readInt("Select: ");
@@ -160,8 +157,6 @@ public class Controller {
         input.waitEnter();
     }
 
-    // ===== mark / edit / delete ===================================
-
     private void markAsDone() {
         if (manager.getAllSchedules().isEmpty()) {
             showMessageAndPause("No schedules to update.");
@@ -187,7 +182,6 @@ public class Controller {
             return;
         }
 
-        // Polymorphic field list — no instanceof, no per-category switch.
         List<EditableField> fields = schedule.getEditableFields();
 
         while (true) {
@@ -216,7 +210,6 @@ public class Controller {
         showMessageAndPause(ok ? "Schedule deleted." : "Schedule not found.");
     }
 
-    // ===== theme ==================================================
 
     private void changeColors() {
         view.printColorMenu(color);
@@ -232,7 +225,7 @@ public class Controller {
         showMessageAndPause("Theme color changed.");
     }
 
-    // ===== helpers ================================================
+
 
     private void showMessageAndPause(String message) {
         view.printMessage(color, message);

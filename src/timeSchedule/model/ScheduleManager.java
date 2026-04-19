@@ -18,10 +18,7 @@ public class ScheduleManager {
         return new ArrayList<>(schedules);
     }
 
-    /**
-     * Returns all schedules sorted by the given strategy.
-     * Replaces the previous four near-duplicate getSchedulesSortedBy* methods.
-     */
+
     public List<Schedule> getSchedulesSortedBy(SortOption option) {
         List<Schedule> list = new ArrayList<>(schedules);
         list.sort(option.comparator());
