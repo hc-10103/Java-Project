@@ -204,7 +204,7 @@ Each subclass provides its own implementation of the two abstract methods declar
 |--------|------|
 | `getSortDate(): LocalDate` | Returns the date used for sorting. `Fixed` computes the next occurrence of its `dayOfWeek`; all others simply return `date`. |
 | `getDetailLines(): List<String[]>` | Returns the category-specific `(label, value)` rows shown in the detail card. |
-| 'addCetegorySpecificFields()' | Template Method Pattern: Called by the parent Schedule to seamlessly inject child-specific fields into the edit menu. |
+| `addCategorySpecificFields()` | Template Method Pattern: Called by the parent Schedule to seamlessly inject child-specific fields into the edit menu. |
 
 This lets `ScheduleManager` sort and `View` render any `Schedule` without knowing its concrete type.
 
