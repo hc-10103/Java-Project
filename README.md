@@ -22,7 +22,7 @@
 |------|-------|
 | **Title** | Time Scheduling System |
 | **Team** | 22500819 안희찬 (Team Leader) |
-| **Language** | Java (JDK 17+) |
+| **Language** | Java |
 | **Type** | Console application |
 
 ### Description
@@ -118,9 +118,12 @@ From any schedule list, entering a schedule ID opens its detail card — showing
 
 ### 5.5 Mark as Done — `3`
 
-Select `3`, enter the schedule's ID, and its status flips from `TODO` (✗) to `DONE` (✓).
+Select `3`, enter the schedule's ID, and its status flips from `TODO` (X) to `DONE` (V). The change is immediately reflected in the schedule list.
 
-![Mark as Done](images/done.png)
+<p align="center">
+  <img src="images/done.png" alt="Mark as Done Command" width="48%">
+  <img src="images/done_result.png" alt="Mark as Done Result" width="48%">
+</p>
 
 ---
 
