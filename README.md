@@ -1,17 +1,44 @@
-# Java-Project
-
-Team : 22500819 안희찬(팀장)
-
-Title of Project : Time Scheduling
-
-Brief Paragraph : This project is a simple time scheduling system that allows users to add, view, and manage daily schedules. It prevents overlapping schedules and helps users organize their time efficiently using a console-based interface.
-
-
-# 📌 Project Overview
+# 🕒 Java Time Scheduling System
 
 ---
 
-## 🧩 Features
+## 📌 Project Overview
+
+**Project Title**  
+Time Scheduling System  
+
+**Team**  
+22500819 Ahn Hee-chan (Team Leader)
+
+**Description**  
+This project is a console-based time scheduling system that helps users manage daily tasks efficiently.  
+Users can add, view, edit, and delete schedules with different categories such as **Exam, Assignment, Fixed, and General**.
+
+The system provides sorting, filtering, and a minimal UI design to improve usability.  
+This project demonstrates core **Object-Oriented Programming concepts** such as inheritance, polymorphism, and encapsulation.
+
+---
+
+## 🎥 Presentation Video
+
+👉 (Insert your YouTube link here)
+
+---
+
+## 🧱 UML Diagram
+
+![UML Diagram](images/uml.png)
+
+---
+
+## 🧩 Key Features
+
+- Category-based schedule management
+- Priority visualization (● ● ●)
+- Clean card-style UI
+- Sorting (date, priority, status)
+- Detailed view per schedule
+- Theme color customization
 
 ---
 
@@ -19,10 +46,8 @@ Brief Paragraph : This project is a simple time scheduling system that allows us
 
 ---
 
-## 📷 Screenshots
+### ▶ 1. Run Program
 
----
-
-## 🧱 UML Diagram
-
----
+```bash
+javac Main.java
+java Main
