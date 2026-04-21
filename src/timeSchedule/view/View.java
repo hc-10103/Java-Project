@@ -119,7 +119,7 @@ public class View {
             printCard(schedule);
         }
 
-        System.out.println(GRAY + "Enter an ID to view details, or 0 to go back." + RESET);
+        System.out.println(GRAY + "Enter an ID to view details, or 0 to go back. " + RESET);
         System.out.println();
     }
 
