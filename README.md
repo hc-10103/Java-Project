@@ -39,7 +39,7 @@ The project was implemented as a final assignment for the Object-Oriented Progra
 
 ## 2. Presentation Video
 
-▶ **YouTube**: _(insert your link here)_
+▶ **YouTube**: https://youtu.be/955ffu-Kg2Y   English presentation. I am sorry.. My English is too bad... :(
 
 ---
 
@@ -120,10 +120,10 @@ From any schedule list, entering a schedule ID opens its detail card — showing
 
 Select `3`, enter the schedule's ID, and its status flips from `TODO` (X) to `DONE` (V). The change is immediately reflected in the schedule list.
 
-<p align="center">
-  <img src="images/done.png" alt="Mark as Done Command" width="48%">
-  <img src="images/done_result.png" alt="Mark as Done Result" width="48%">
-</p>
+![Mark as Done Command](images/done.png)
+<br>
+![Mark as Done Result](images/done_result.png)
+
 
 ---
 
@@ -158,35 +158,27 @@ src/
 └── timeSchedule/
     ├── Main.java
     ├── controller/
-    │   └── Controller.java
+    │   ├── Controller.java
+    │   └── InputReader.java
     ├── model/
-    │   ├── Schedule.java          (abstract)
+    │   ├── Schedule.java
     │   ├── Exam.java
     │   ├── Assignment.java
     │   ├── Fixed.java
     │   ├── General.java
     │   ├── ScheduleManager.java
-    │   ├── Category.java          (enum)
-    │   ├── Priority.java          (enum)
-    │   └── Status.java            (enum)
+    │   ├── EditableField.java
+    │   ├── ScheduleInput.java
+    │   ├── Category.java
+    │   ├── Priority.java
+    │   ├── Status.java
+    │   └── SortOption.java
     └── view/
         ├── View.java
         └── Color.java
 
-images/
-├── uml.png
-├── main.png
-├── add.png
-├── view_menu.png
-├── view_category.png
-├── view_sort.png
-├── detail.png
-├── done.png
-├── edit.png
-├── delete.png
-└── color.png
 
-README.md
+
 ```
 
 ---
@@ -194,13 +186,14 @@ README.md
 ## 7. OOP Design Notes
 
 ### Inheritance
-
 ```
 Schedule  (abstract)
  ├── Exam         — Subject, Location
- ├── Assignment   — Subject, Submission Type
+ ├── Assignment   — Submission Type       (uses inherited Title)
  ├── Fixed        — Day of Week, Place    (weekly recurring, date = null)
  └── General      — Place
+
+
 ```
 
 ### Polymorphism
@@ -211,6 +204,7 @@ Each subclass provides its own implementation of the two abstract methods declar
 |--------|------|
 | `getSortDate(): LocalDate` | Returns the date used for sorting. `Fixed` computes the next occurrence of its `dayOfWeek`; all others simply return `date`. |
 | `getDetailLines(): List<String[]>` | Returns the category-specific `(label, value)` rows shown in the detail card. |
+| `addCategorySpecificFields()` | Template Method Pattern: Called by the parent Schedule to seamlessly inject child-specific fields into the edit menu. |
 
 This lets `ScheduleManager` sort and `View` render any `Schedule` without knowing its concrete type.
 
@@ -219,3 +213,4 @@ This lets `ScheduleManager` sort and `View` render any `Schedule` without knowin
 - Every field in the model is `private`.
 - Mutation happens only through setters, which also keep derived state in sync (e.g. `Exam.setSubject()` also updates the schedule's `title`).
 - Each layer is in its own package — `model`, `view`, `controller` — and depends only on its layer-mates and the layer directly below it.
+- Input processing is completely decoupled; the model relies solely on the ScheduleInput interface rather than directly accessing standard console I/O (Scanner).
