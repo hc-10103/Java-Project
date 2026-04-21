@@ -195,7 +195,6 @@ Schedule  (abstract)
 ├── Fixed        — Day of Week, Place    (weekly recurring, date = null)
 └── General      — Place
 
-
 ```
 
 ### Polymorphism
