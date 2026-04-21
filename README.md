@@ -39,7 +39,7 @@ The project was implemented as a final assignment for the Object-Oriented Progra
 
 ## 2. Presentation Video
 
-▶ **YouTube**: https://youtu.be/955ffu-Kg2Y   English presentation. I am sorry.. My English is too bad... :(
+▶ **YouTube**: https://youtu.be/955ffu-Kg2Y   English presentation. I am sorry. My English is too bad... :(
 
 ---
 
@@ -190,17 +190,17 @@ src/
 ### Inheritance
 ```
 Schedule  (abstract)
- ├── Exam         — Subject, Location
- ├── Assignment   — Submission Type       (uses inherited Title)
- ├── Fixed        — Day of Week, Place    (weekly recurring, date = null)
- └── General      — Place
+├── Exam         — Subject, Location
+├── Assignment   — Subject, Submission Type
+├── Fixed        — Day of Week, Place    (weekly recurring, date = null)
+└── General      — Place
 
 
 ```
 
 ### Polymorphism
 
-Each subclass provides its own implementation of the two abstract methods declared by `Schedule`:
+Each subclass provides its own implementation of the three abstract methods declared by `Schedule`:
 
 | Method | Role |
 |--------|------|
