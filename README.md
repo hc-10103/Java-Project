@@ -58,8 +58,10 @@ The diagram is grouped into three layers:
 ## 4. How to Run
 
 ```bash
-javac Main.java
-java Main
+git clone https://github.com/hc-10103/Java-Project.git
+cd Java-Project/src
+javac timeSchedule/Main.java
+java timeSchedule.Main
 ```
 
 The program starts at the main menu and loops until the user selects `0. Exit`.
