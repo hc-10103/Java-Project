@@ -49,9 +49,9 @@ The project was implemented as a final assignment for the Object-Oriented Progra
 
 The diagram is grouped into three layers:
 
-- **View** — `Color` (ANSI constants), `View` (rendering).
-- **Controller** — `Controller` (menu flow + user input).
-- **Model** — `ScheduleManager`, abstract `Schedule`, four subclasses, and the enums `Priority`, `Status`, `Category`.
+* **View** — `Color`, `View` (rendering).
+* **Controller** — `Controller` (menu flow) and `InputReader` (user input).
+* **Model** — `ScheduleManager`, abstract `Schedule` + its four subclasses, the `EditableField` helper, the `ScheduleInput` interface, and the enums `Priority`, `Status`, `Category`, `SortOption`.
 
 ---
 
